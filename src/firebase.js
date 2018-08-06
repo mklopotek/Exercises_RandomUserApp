@@ -1,13 +1,13 @@
-import firebase from 'firebase'
+import firebase from 'firebase';
 
 const config = {
-    apiKey: "AIzaSyCtNc24SxC3ad2D3ybPSTxSdbpaPAtVALo",
-    authDomain: "magda-app.firebaseapp.com",
-    databaseURL: "https://magda-app.firebaseio.com",
-    projectId: "magda-app",
-    storageBucket: "magda-app.appspot.com",
-    messagingSenderId: "115942300345"
-  };
+  apiKey: "AIzaSyDs2A1VmBieMPCvgU_nFDBZ2BbCBqH9Lqs",
+  authDomain: "jfddl5-b6726.firebaseapp.com",
+  databaseURL: "https://jfddl5-b6726.firebaseio.com",
+  projectId: "jfddl5-b6726",
+  storageBucket: "jfddl5-b6726.appspot.com",
+  messagingSenderId: "60397367540"
+};
 const firebaseApp = firebase.initializeApp(config);
 
-  export default firebase.database()
+export default firebaseApp.database();
