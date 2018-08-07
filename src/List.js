@@ -9,8 +9,10 @@ class List extends Component {
     }
 
     clickHandler = () => {
-        database.ref('/test')
-        .push({user: this.state.user})
+        fetch('https://magda-app.firebaseio.com/users.json')
+        .then(response => response.json())
+        .then(data => console.log(data))
+
     }
 
     handleChange = (event) => {
@@ -19,20 +21,20 @@ class List extends Component {
         })
     }
 
-    componentWillMount() {
-        database.ref('/test')
-            .on('value', (snapshot) => {
-                const firebaseData = Object.entries(
-                    snapshot.val() || {}
-                );
+    // componentWillMount() {
+    //     database.ref('/test')
+    //         .on('value', (snapshot) => {
+    //             const firebaseData = Object.entries(
+    //                 snapshot.val() || {}
+    //             );
 
-                const data = firebaseData.map(([id, value]) => {
-                    value.id = id;
-                    return value;
-                });
-                this.setState({ list: data });
-            });
-    }
+    //             const data = firebaseData.map(([id, value]) => {
+    //                 value.id = id;
+    //                 return value;
+    //             });
+    //             this.setState({ list: data });
+    //         });
+    // }
 
     render() {
         return (
