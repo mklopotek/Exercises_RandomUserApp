@@ -9,7 +9,12 @@ class List extends Component {
     }
 
     clickHandler = () => {
-        fetch('https://magda-app.firebaseio.com/users.json')
+        const request = {
+            method: 'POST',
+            body: JSON.stringify({ username: this.state.user })
+        }
+
+        fetch('https://magda-app.firebaseio.com/users.json', request)
         .then(response => response.json())
         .then(data => console.log(data))
 
