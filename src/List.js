@@ -28,6 +28,8 @@ class List extends Component {
                     lastName: '',
                     age: ''
                 })
+                
+                this.loadData()
 
             })
 
@@ -64,16 +66,37 @@ class List extends Component {
             })
     }
 
-    removeHandler = (id) => {
-console.log('Hura id: ', id)
+    loadData() {
+        fetch('https://magda-app.firebaseio.com/users.json')
+        .then(response => response.json())
+        .then(data => {
 
-const request = {
-    method: 'DELETE'
+            const firebaseArray = Object.entries(data || [])
+            const firebaseData = firebaseArray.map(item => {
+
+                return {
+                    id: item[0],
+                    ...item[1]
+                }
+            }
+            )
+
+            this.setState({ list: firebaseData })
+
+        })
 }
 
-fetch('https://magda-app.firebaseio.com/users/'+ id +'.json', request)
+    removeHandler = (id) => {
+
+        const request = {
+            method: 'DELETE'
+        }
+
+        fetch(`https://magda-app.firebaseio.com/users/${id}.json`, request)
             .then(response => response.json())
-            .then(data => console.log(data))
+            .then(data => {console.log(data)
+            this.loadData()}
+        )
     }
 
     render() {
@@ -85,13 +108,13 @@ fetch('https://magda-app.firebaseio.com/users/'+ id +'.json', request)
                 Surname: <input name='lastName' placeholder='last name' type="text" onChange={this.handleChange} value={this.state.lastName} />
                 Age: <input name='age' placeholder='last name' type="text" onChange={this.handleChange} value={this.state.age} />
                 <button onClick={this.clickHandler}>Click me</button>
-               
+
                 <div>
                     <ul>
                         {this.state.list.map((item) => (
                             <li key={item.id}>
                                 <div>{item.name + ' ' + item.lastName
-                                + ' ' + item.age}</div>
+                                    + ' ' + item.age}</div>
                                 <button onClick={() => this.removeHandler(item.id)}>Remove</button>
                             </li>
                         ))}
