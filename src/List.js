@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+const myApiUrl = 'https://magda-app.firebaseio.com/users'
+
 class List extends Component {
 
     state = {
@@ -24,7 +26,7 @@ class List extends Component {
                 })
             }
     
-            fetch(`https://magda-app.firebaseio.com/users/${this.state.editId}.json`, request)
+            fetch(`${myApiUrl}/${this.state.editId}.json`, request)
                 .then(response => response.json())
                 .then(data => {
     
@@ -49,7 +51,7 @@ class List extends Component {
             })
         }
 
-        fetch('https://magda-app.firebaseio.com/users.json', request)
+        fetch(`${myApiUrl}.json`, request)
             .then(response => response.json())
             .then(data => {
 
@@ -78,7 +80,7 @@ class List extends Component {
 
     componentWillMount() {
 
-        fetch('https://magda-app.firebaseio.com/users.json')
+        fetch(`${myApiUrl}.json`)
             .then(response => response.json())
             .then(data => {
 
@@ -98,7 +100,7 @@ class List extends Component {
     }
 
     loadData() {
-        fetch('https://magda-app.firebaseio.com/users.json')
+        fetch(`${myApiUrl}.json`)
             .then(response => response.json())
             .then(data => {
 
@@ -123,7 +125,7 @@ class List extends Component {
             method: 'DELETE'
         }
 
-        fetch(`https://magda-app.firebaseio.com/users/${id}.json`, request)
+        fetch(`${myApiUrl}/${id}.json`, request)
             .then(response => response.json())
             .then(data => {
                 console.log(data)
