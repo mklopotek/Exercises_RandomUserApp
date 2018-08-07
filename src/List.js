@@ -6,10 +6,40 @@ class List extends Component {
         name: '',
         lastName: '',
         age: '',
-        list: []
+        editMode: false,
+        editId: '',
+        list: [],
+        butonName: 'Add user'
     }
 
     clickHandler = () => {
+
+        if(this.state.editMode){
+            const request = {
+                method: 'PUT',
+                body: JSON.stringify({
+                    name: this.state.name,
+                    lastName: this.state.lastName,
+                    age: this.state.age
+                })
+            }
+    
+            fetch(`https://magda-app.firebaseio.com/users/${this.state.editId}.json`, request)
+                .then(response => response.json())
+                .then(data => {
+    
+                    this.setState({
+                        name: '',
+                        lastName: '',
+                        age: '',
+                        editMode: false,
+                        butonName: 'Add user'
+                    })
+    
+                    this.loadData()
+    
+                })
+        }else{
         const request = {
             method: 'POST',
             body: JSON.stringify({
@@ -28,10 +58,11 @@ class List extends Component {
                     lastName: '',
                     age: ''
                 })
-                
+
                 this.loadData()
 
             })
+        }
 
     }
 
@@ -68,23 +99,23 @@ class List extends Component {
 
     loadData() {
         fetch('https://magda-app.firebaseio.com/users.json')
-        .then(response => response.json())
-        .then(data => {
+            .then(response => response.json())
+            .then(data => {
 
-            const firebaseArray = Object.entries(data || [])
-            const firebaseData = firebaseArray.map(item => {
+                const firebaseArray = Object.entries(data || [])
+                const firebaseData = firebaseArray.map(item => {
 
-                return {
-                    id: item[0],
-                    ...item[1]
+                    return {
+                        id: item[0],
+                        ...item[1]
+                    }
                 }
-            }
-            )
+                )
 
-            this.setState({ list: firebaseData })
+                this.setState({ list: firebaseData })
 
-        })
-}
+            })
+    }
 
     removeHandler = (id) => {
 
@@ -94,9 +125,22 @@ class List extends Component {
 
         fetch(`https://magda-app.firebaseio.com/users/${id}.json`, request)
             .then(response => response.json())
-            .then(data => {console.log(data)
-            this.loadData()}
-        )
+            .then(data => {
+                console.log(data)
+                this.loadData()
+            }
+            )
+    }
+
+    editHandler = (item) => {
+        this.setState({
+            editMode: true,
+            name: item.name,
+            lastName: item.lastName,
+            age: item.age,
+            butonName: 'Edit user',
+            editId: item.id
+        })
     }
 
     render() {
@@ -106,8 +150,8 @@ class List extends Component {
                 </div>
                 Name:  <input name='name' placeholder='name' type="text" onChange={this.handleChange} value={this.state.name} />
                 Surname: <input name='lastName' placeholder='last name' type="text" onChange={this.handleChange} value={this.state.lastName} />
-                Age: <input name='age' placeholder='last name' type="text" onChange={this.handleChange} value={this.state.age} />
-                <button onClick={this.clickHandler}>Click me</button>
+                Age: <input name='age' placeholder='age' type="text" onChange={this.handleChange} value={this.state.age} />
+                <button onClick={this.clickHandler}>{this.state.butonName}</button>
 
                 <div>
                     <ul>
@@ -115,6 +159,7 @@ class List extends Component {
                             <li key={item.id}>
                                 <div>{item.name + ' ' + item.lastName
                                     + ' ' + item.age}</div>
+                                <button onClick={() => this.editHandler(item)}>Edit</button>
                                 <button onClick={() => this.removeHandler(item.id)}>Remove</button>
                             </li>
                         ))}
